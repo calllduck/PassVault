@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %> — PassVault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm border-b border-gray-200">
+    <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+      <a href="/" class="text-xl font-bold text-indigo-600">🔐 PassVault</a>
+      <% if (locals.user) { %>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-gray-500"><%= user.email %></span>
+          <form action="/auth/logout" method="POST">
+            <button class="text-sm text-red-500 hover:text-red-700">Logout</button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="max-w-4xl mx-auto px-4 py-8">
+    <%- body %>
+  </main>
+
+</body>
+</html>

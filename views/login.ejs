@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — PassVault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-200 w-full max-w-md">
+    <h1 class="text-2xl font-bold text-indigo-600 mb-2">🔐 PassVault</h1>
+    <p class="text-gray-500 mb-6">Login ke akun kamu</p>
+
+    <% if (locals.error) { %>
+      <div class="bg-red-50 text-red-600 px-4 py-3 rounded-lg mb-4 text-sm">
+        <%= error %>
+      </div>
+    <% } %>
+
+    <form action="/auth/login" method="POST">
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input 
+          type="email" 
+          name="email" 
+          required
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          placeholder="email@example.com"
+        >
+      </div>
+      <div class="mb-6">
+        <label class="block text-sm font-medium text-gray-700 mb-1">Master Password</label>
+        <input 
+          type="password" 
+          name="password" 
+          required
+          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+      </div>
+      <button 
+        type="submit"
+        class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+      >
+        Login
+      </button>
+    </form>
+
+    <p class="text-center text-sm text-gray-500 mt-4">
+      Belum punya akun? <a href="/register" class="text-indigo-600 hover:underline">Register</a>
+    </p>
+  </div>
+</body>
+</html>
