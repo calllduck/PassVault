@@ -11,6 +11,5 @@ COPY package*.json ./
 RUN npm ci --omit=dev
 COPY --from=builder /app/src ./src
 COPY --from=builder /app/views ./views
-COPY --from=builder /app/public ./public
 EXPOSE 3000
 CMD ["node", "src/app.js"]
