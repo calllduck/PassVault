@@ -2,3 +2,5 @@
 CVE-2024-21538
 # glob - false positive, fixed in 11.1.0 (devDependency via Jest)
 CVE-2025-64756
+# minimatch - false positive, fixed in 9.0.6 (devDependency via Jest)
+CVE-2026-26996
