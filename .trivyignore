@@ -1,0 +1,2 @@
+# cross-spawn CVE - already fixed in 7.0.6, false positive
+CVE-2024-21538
