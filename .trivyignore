@@ -1,2 +1,4 @@
-# cross-spawn CVE - already fixed in 7.0.6, false positive
+# cross-spawn - false positive, fixed in 7.0.6 (devDependency via Jest)
 CVE-2024-21538
+# glob - false positive, fixed in 11.1.0 (devDependency via Jest)
+CVE-2025-64756
