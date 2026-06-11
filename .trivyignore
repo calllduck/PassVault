@@ -4,3 +4,13 @@ CVE-2024-21538
 CVE-2025-64756
 # minimatch - false positive, fixed in 9.0.6 (devDependency via Jest)
 CVE-2026-26996
+# minimatch - false positive, devDependency via Jest dan ESLint
+CVE-2026-27903
+CVE-2026-27904
+# tar - false positive, tidak ada di dependencies project
+CVE-2026-23745
+CVE-2026-23950
+CVE-2026-24842
+CVE-2026-26960
+CVE-2026-29786
+CVE-2026-31802
