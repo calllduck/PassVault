@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS vault_entries (
   username VARCHAR(255),
   encrypted_password TEXT NOT NULL,
   iv TEXT NOT NULL,
+  auth_tag TEXT NOT NULL,
   category VARCHAR(100),
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
