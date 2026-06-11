@@ -1,5 +1,5 @@
 // Set ENCRYPTION_KEY untuk testing
-process.env.ENCRYPTION_KEY = 'test_encryption_key_for_testing';
+process.env.ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'test_encryption_key_for_testing_32b';
 
 const { 
   hashPassword, 
