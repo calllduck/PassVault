@@ -1,14 +1,41 @@
 require('dotenv').config();
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 const authRoutes = require('./routes/auth');
 const vaultRoutes = require('./routes/vault');
-const cookieParser = require('cookie-parser');
 
-// Middleware: parsing request body
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 100,                  // max 100 request per 15 menit
+  message: { error: 'Terlalu banyak request, coba lagi nanti' }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 menit
+  max: 20,                   // max 20 request login/register per 15 menit
+  message: { error: 'Terlalu banyak percobaan login, coba lagi nanti' }
+});
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(limiter);
+
+// CSRF protection
+if (process.env.NODE_ENV !== 'test') {
+  const { doubleCsrf } = require('csrf-csrf');
+  const { doubleCsrfProtection } = doubleCsrf({
+    getSecret: () => process.env.JWT_SECRET,
+    cookieName: 'csrf-token',
+    cookieOptions: { sameSite: 'strict', secure: false }
+  });
+  app.use(doubleCsrfProtection);
+}
 
 // Template engine
 app.set('view engine', 'ejs');
@@ -16,8 +43,7 @@ app.set('views', './views');
 
 // Static files
 app.use(express.static('public'));
-app.use('/auth', authRoutes);
-app.use(cookieParser());
+app.use('/auth', authLimiter, authRoutes);
 app.use('/vault', vaultRoutes);
 
 // Route sementara untuk test
