@@ -10,23 +10,23 @@ let cookie; // simpan cookie JWT setelah login
 
 beforeAll(async () => {
   // Bersihkan data test
-  await pool.query("DELETE FROM users WHERE email LIKE '%@test.com'");
+  await pool.query("DELETE FROM users WHERE email LIKE '%@vault-test.com'");
 
   // Buat user test
   await request(app)
     .post('/auth/register')
-    .send({ email: 'vault@test.com', password: 'password123' });
+    .send({ email: 'vault@vault-test.com', password: 'password123' });
 
   // Login untuk dapat cookie JWT
   const loginRes = await request(app)
     .post('/auth/login')
-    .send({ email: 'vault@test.com', password: 'password123' });
+    .send({ email: 'vault@vault-test.com', password: 'password123' });
 
   cookie = loginRes.headers['set-cookie'];
 });
 
 afterAll(async () => {
-  await pool.query("DELETE FROM users WHERE email LIKE '%@test.com'");
+  await pool.query("DELETE FROM users WHERE email LIKE '%@vault-test.com'");
   await pool.end();
 });
 
@@ -89,7 +89,7 @@ describe('GET /vault/:id', () => {
     // Ambil id entry yang baru dibuat
     const dbRes = await pool.query(
       `SELECT id FROM vault_entries 
-       WHERE user_id = (SELECT id FROM users WHERE email = 'vault@test.com')
+       WHERE user_id = (SELECT id FROM users WHERE email = 'vault@vault-test.com')
        ORDER BY created_at DESC LIMIT 1`
     );
     entryId = dbRes.rows[0].id;
@@ -129,7 +129,7 @@ describe('DELETE /vault/:id', () => {
 
     const dbRes = await pool.query(
       `SELECT id FROM vault_entries 
-       WHERE user_id = (SELECT id FROM users WHERE email = 'vault@test.com')
+       WHERE user_id = (SELECT id FROM users WHERE email = 'vault@vault-test.com')
        ORDER BY created_at DESC LIMIT 1`
     );
     entryId = dbRes.rows[0].id;

@@ -8,11 +8,11 @@ const pool = require('../models/db');
 
 // Bersihkan user test sebelum dan sesudah semua test
 beforeAll(async () => {
-  await pool.query("DELETE FROM users WHERE email LIKE '%@test.com'");
+  await pool.query("DELETE FROM users WHERE email LIKE '%@auth-test.com'");
 });
 
 afterAll(async () => {
-  await pool.query("DELETE FROM users WHERE email LIKE '%@test.com'");
+  await pool.query("DELETE FROM users WHERE email LIKE '%@auth-test.com'");
   await pool.end();
 });
 
@@ -20,7 +20,7 @@ describe('POST /auth/register', () => {
   test('berhasil register dengan data valid', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ email: 'register@test.com', password: 'password123' });
+      .send({ email: 'register@auth-test.com', password: 'password123' });
     
     expect(res.status).toBe(302); // redirect setelah berhasil
   });
@@ -28,7 +28,7 @@ describe('POST /auth/register', () => {
   test('gagal register dengan email yang sama', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ email: 'register@test.com', password: 'password123' });
+      .send({ email: 'register@auth-test.com', password: 'password123' });
     
     expect(res.status).toBe(200); // render halaman dengan error
     expect(res.text).toContain('Email sudah terdaftar');
@@ -46,7 +46,7 @@ describe('POST /auth/register', () => {
   test('gagal register dengan password kurang dari 8 karakter', async () => {
     const res = await request(app)
       .post('/auth/register')
-      .send({ email: 'short@test.com', password: '123' });
+      .send({ email: 'short@auth-test.com', password: '123' });
     
     expect(res.status).toBe(200);
     expect(res.text).toContain('Password minimal 8 karakter');
@@ -57,7 +57,7 @@ describe('POST /auth/login', () => {
   test('berhasil login dengan kredensial benar', async () => {
     const res = await request(app)
       .post('/auth/login')
-      .send({ email: 'register@test.com', password: 'password123' });
+      .send({ email: 'register@auth-test.com', password: 'password123' });
     
     expect(res.status).toBe(302); // redirect ke /vault
     expect(res.headers['set-cookie']).toBeDefined(); // cookie JWT ada
@@ -66,7 +66,7 @@ describe('POST /auth/login', () => {
   test('gagal login dengan password salah', async () => {
     const res = await request(app)
       .post('/auth/login')
-      .send({ email: 'register@test.com', password: 'passwordsalah' });
+      .send({ email: 'register@auth-test.com', password: 'passwordsalah' });
     
     expect(res.status).toBe(200);
     expect(res.text).toContain('Email atau password salah');
@@ -75,7 +75,7 @@ describe('POST /auth/login', () => {
   test('gagal login dengan email tidak terdaftar', async () => {
     const res = await request(app)
       .post('/auth/login')
-      .send({ email: 'tidakada@test.com', password: 'password123' });
+      .send({ email: 'tidakada@auth-test.com', password: 'password123' });
     
     expect(res.status).toBe(200);
     expect(res.text).toContain('Email atau password salah');
