@@ -94,7 +94,7 @@ router.post('/', async (req, res) => {
     // Enkripsi password
     const { encrypted, iv, authTag } = encryptPassword(password);
 
-    const result = await pool.query(
+    await pool.query(
       `INSERT INTO vault_entries 
        (user_id, service_name, service_url, username, encrypted_password, iv, auth_tag, category)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)

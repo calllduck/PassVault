@@ -47,7 +47,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
         env:
           DATABASE_URL: postgresql://postgres:postgres@localhost:5433/passvault
           ENCRYPTION_KEY: ${{ secrets.ENCRYPTION_KEY }}
