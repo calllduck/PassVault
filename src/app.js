@@ -33,7 +33,7 @@ const { doubleCsrfProtection } = doubleCsrf({
   getSessionIdentifier: (req) => req.cookies['token'] || req.ip,
   getCsrfTokenFromRequest: (req) => req.body?._csrf || req.headers['x-csrf-token'],
   cookieName: 'csrf-token',
-  cookieOptions: { sameSite: 'strict', secure: false },
+  cookieOptions: { sameSite: 'strict', secure: process.env.NODE_ENV === 'production' },
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
 });
 app.use((req, res, next) => {
