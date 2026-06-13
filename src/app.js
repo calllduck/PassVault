@@ -34,11 +34,15 @@ const { doubleCsrfProtection } = doubleCsrf({
   getCsrfTokenFromRequest: (req) => req.body?._csrf || req.headers['x-csrf-token'],
   cookieName: 'csrf-token',
   cookieOptions: { sameSite: 'strict', secure: false },
-  ignoredMethods: process.env.NODE_ENV === 'test' 
-    ? ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE', 'PATCH'] 
-    : ['GET', 'HEAD', 'OPTIONS']
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS']
 });
-app.use(doubleCsrfProtection);
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV === 'test') {
+    req.csrfToken = () => 'test-csrf-token';
+    return next();
+  }
+  return doubleCsrfProtection(req, res, next);
+});
 
 // Template engine
 app.set('view engine', 'ejs');

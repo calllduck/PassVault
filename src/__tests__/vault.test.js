@@ -1,7 +1,7 @@
+process.env.NODE_ENV = 'test';
 process.env.ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'test_encryption_key_for_testing_32b';
 process.env.JWT_SECRET = process.env.JWT_SECRET || 'test_jwt_secret';
 process.env.DATABASE_URL = process.env.DATABASE_URL || 'postgresql://kein:kein@localhost:5432/passvault';
-
 const request = require('supertest');
 const app = require('../app');
 const pool = require('../models/db');
