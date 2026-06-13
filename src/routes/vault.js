@@ -20,7 +20,8 @@ router.get('/', async (req, res) => {
     );
     res.render('vault', { 
       user: req.user, 
-      entries: result.rows 
+      entries: result.rows,
+      csrfToken: req.csrfToken()
     });
   } catch (err) {
     console.error(err);
@@ -28,24 +29,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// GET semua vault entries milik user yang login
-router.get('/', async (req, res) => {
-  try {
-    const result = await pool.query(
-      `SELECT id, service_name, service_url, username, category, created_at 
-       FROM vault_entries 
-       WHERE user_id = $1 
-       ORDER BY service_name ASC`,
-      [req.user.userId]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-// GET satu entry + decrypt password (ini aksi sensitif!)
+// GET satu entry + decrypt password
 router.get('/:id', async (req, res) => {
   try {
     const result = await pool.query(

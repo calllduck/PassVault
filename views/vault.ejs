@@ -15,6 +15,7 @@
       <div class="flex items-center gap-4">
         <span class="text-sm text-gray-500"><%= user.email %></span>
         <form action="/auth/logout" method="POST">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <button class="text-sm text-red-500 hover:text-red-700">Logout</button>
         </form>
       </div>
@@ -80,6 +81,7 @@
     <div class="bg-white rounded-xl p-6 w-full max-w-md shadow-xl">
       <h2 class="text-lg font-bold text-gray-800 mb-4">Tambah Password Baru</h2>
       <form action="/vault" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
         <div class="mb-3">
           <label class="block text-sm font-medium text-gray-700 mb-1">Nama Layanan *</label>
           <input type="text" name="service_name" required
@@ -148,7 +150,12 @@
 
     async function deleteEntry(id) {
       if (!confirm('Yakin hapus entry ini?')) return;
-      await fetch(`/vault/${id}`, { method: 'DELETE' });
+      await fetch(`/vault/${id}`, { 
+        method: 'DELETE',
+        headers: {
+          'x-csrf-token': '<%= csrfToken %>'
+        }
+      });
       location.reload();
     }
   </script>
