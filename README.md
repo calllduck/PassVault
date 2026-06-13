@@ -1,4 +1,4 @@
-# PassVault — Personal Password Manager
+# PassVault - Personal Password Manager
 
 PassVault adalah aplikasi web personal password manager yang memungkinkan pengguna menyimpan, mengelola, dan mengakses kredensial (username dan password) untuk berbagai layanan online secara aman dalam satu tempat terpusat.
 
@@ -10,7 +10,7 @@ Live Demo: https://passvault-production-group13.up.railway.app
 
 PassVault ditujukan untuk pengguna individual yang ingin meninggalkan kebiasaan menggunakan password yang sama di banyak layanan, atau menyimpan password di tempat yang tidak aman seperti catatan di browser, file teks, atau aplikasi pesan.
 
-PassVault termasuk kategori security-critical application — aplikasi yang fungsi utamanya adalah menyimpan dan melindungi data sensitif pengguna. Berbeda dengan aplikasi e-commerce atau sosial media yang menyimpan data pribadi sebagai konsekuensi sampingan, di PassVault data sensitif (kredensial pengguna) adalah core asset yang dijaga. Konsekuensi langsungnya: ekspektasi terhadap kualitas keamanan kode, dependency, dan deployment pipeline jauh lebih ketat dibanding aplikasi pada umumnya.
+PassVault termasuk kategori security-critical application, aplikasi yang fungsi utamanya adalah menyimpan dan melindungi data sensitif pengguna. Berbeda dengan aplikasi e-commerce atau sosial media yang menyimpan data pribadi sebagai konsekuensi sampingan, di PassVault data sensitif (kredensial pengguna) adalah core asset yang dijaga. Konsekuensi langsungnya: ekspektasi terhadap kualitas keamanan kode, dependency, dan deployment pipeline jauh lebih ketat dibanding aplikasi pada umumnya.
 
 ### Fitur Utama
 
@@ -18,7 +18,7 @@ PassVault termasuk kategori security-critical application — aplikasi yang fung
 - Penyimpanan vault entry (nama layanan, URL, username, password) dengan enkripsi AES-256-GCM di sisi server sebelum data tersimpan ke database
 - Pencarian dan filter entry berdasarkan nama layanan atau kategori
 - Session management dengan JWT token dan timeout otomatis untuk meminimalkan risiko session hijacking
-- Audit log — setiap aksi sensitif (login, view password, edit, delete) dicatat untuk akuntabilitas
+- Audit log, setiap aksi sensitif (login, view password, edit, delete) dicatat untuk akuntabilitas
 
 ### Tech Stack
 
@@ -59,7 +59,7 @@ Aplikasi berjalan di http://localhost:3000
 
 ## Arsitektur Pipeline CI/CD
 
-Pipeline CI/CD dirancang dengan prinsip defense-in-depth: multiple layers of security checks sebelum kode boleh masuk ke branch utama. Pendekatan ini disebut shift-left security — pemeriksaan keamanan dilakukan di tahap paling awal pengembangan (pada saat kode di-commit, bukan pada saat aplikasi sudah deploy).
+Pipeline CI/CD dirancang dengan prinsip defense-in-depth: multiple layers of security checks sebelum kode boleh masuk ke branch utama. Pendekatan ini disebut shift-left security, pemeriksaan keamanan dilakukan di tahap paling awal pengembangan (pada saat kode di-commit, bukan pada saat aplikasi sudah deploy).
 
 ### Trigger Pipeline
 
@@ -104,7 +104,7 @@ ESLint dengan `eslint-plugin-security` mendeteksi pola kode rawan seperti penggu
 
 ### Unit dan Integration Test
 
-Jest untuk unit test (validasi enkripsi, hashing) dan Supertest untuk integration test endpoint Express (auth, CRUD vault entry). Service container PostgreSQL 16 disediakan GitHub Actions untuk test integrasi database. Coverage threshold minimal 70% — di bawah angka ini, pipeline gagal.
+Jest untuk unit test (validasi enkripsi, hashing) dan Supertest untuk integration test endpoint Express (auth, CRUD vault entry). Service container PostgreSQL 16 disediakan GitHub Actions untuk test integrasi database. Coverage threshold minimal 70%, di bawah angka ini, pipeline gagal.
 
 ### Docker Build
 
@@ -118,7 +118,7 @@ File: `.github/workflows/security.yml`
 
 Empat lapisan pemeriksaan keamanan otomatis yang mencakup spektrum ancaman berbeda: kerentanan dependency, kebocoran rahasia, kelemahan kode, hingga vulnerability di image container.
 
-### 1. Dependency Vulnerability Scanning — npm audit
+### 1. Dependency Vulnerability Scanning - npm audit
 
 ```yaml
 - name: NPM Audit
@@ -127,9 +127,9 @@ Empat lapisan pemeriksaan keamanan otomatis yang mencakup spektrum ancaman berbe
 
 Memeriksa seluruh package dependency terhadap database publik vulnerability (NVD, GitHub Advisory). Pipeline gagal jika ditemukan vulnerability dengan severity high atau critical.
 
-Relevansi dengan PassVault: satu vulnerability di library kriptografi atau parser HTTP dapat berakibat fatal — contohnya Heartbleed (OpenSSL) atau prototype pollution di library JavaScript yang dapat memungkinkan attacker membaca seluruh isi vault.
+Relevansi dengan PassVault: satu vulnerability di library kriptografi atau parser HTTP dapat berakibat fatal, contohnya Heartbleed (OpenSSL) atau prototype pollution di library JavaScript yang dapat memungkinkan attacker membaca seluruh isi vault.
 
-### 2. Secret Scanning — Gitleaks
+### 2. Secret Scanning - Gitleaks
 
 ```yaml
 - uses: gitleaks/gitleaks-action@v2
@@ -137,9 +137,9 @@ Relevansi dengan PassVault: satu vulnerability di library kriptografi atau parse
 
 Memindai seluruh history commit untuk mendeteksi pola yang menyerupai secret: API key, JWT secret, private key, password yang ter-hardcode, dan sebagainya.
 
-Relevansi dengan PassVault: secret yang paling kritis adalah ENCRYPTION_KEY — kunci AES-256-GCM yang mengenkripsi seluruh password vault. Jika kunci ini bocor via commit tidak sengaja, semua data password yang tersimpan di database dapat didekripsi.
+Relevansi dengan PassVault: secret yang paling kritis adalah ENCRYPTION_KEY, kunci AES-256-GCM yang mengenkripsi seluruh password vault. Jika kunci ini bocor via commit tidak sengaja, semua data password yang tersimpan di database dapat didekripsi.
 
-### 3. Static Application Security Testing — CodeQL
+### 3. Static Application Security Testing - CodeQL
 
 ```yaml
 - uses: github/codeql-action/init@v3
@@ -151,9 +151,9 @@ Relevansi dengan PassVault: secret yang paling kritis adalah ENCRYPTION_KEY — 
 
 Analisis statis source code JavaScript untuk mendeteksi pola vulnerability dari OWASP Top 10: SQL injection, XSS, Path Traversal, SSRF, insecure deserialization, dan lain-lain.
 
-Relevansi dengan PassVault: aplikasi ini memiliki kombinasi rawan vulnerability klasik — form input pengguna (rentan XSS), query database untuk pencarian vault (rentan SQL injection), dan endpoint API yang menerima URL eksternal (rentan SSRF). Satu kelemahan dapat menyebabkan vault entry pengguna lain dapat diakses.
+Relevansi dengan PassVault: aplikasi ini memiliki kombinasi rawan vulnerability klasik, form input pengguna (rentan XSS), query database untuk pencarian vault (rentan SQL injection), dan endpoint API yang menerima URL eksternal (rentan SSRF). Satu kelemahan dapat menyebabkan vault entry pengguna lain dapat diakses.
 
-### 4. Container Image Scanning — Trivy
+### 4. Container Image Scanning - Trivy
 
 ```yaml
 - uses: aquasecurity/trivy-action@master
@@ -163,7 +163,7 @@ Relevansi dengan PassVault: aplikasi ini memiliki kombinasi rawan vulnerability 
     exit-code: 1
 ```
 
-Memindai Docker image untuk vulnerability di OS package level maupun language-level package. Pipeline gagal jika ditemukan vulnerability high atau critical. Trivy melengkapi npm audit dengan menambahkan layer pemeriksaan di luar dependency npm — termasuk OS layer dan runtime Node.js yang dibawa oleh base image.
+Memindai Docker image untuk vulnerability di OS package level maupun language-level package. Pipeline gagal jika ditemukan vulnerability high atau critical. Trivy melengkapi npm audit dengan menambahkan layer pemeriksaan di luar dependency npm, termasuk OS layer dan runtime Node.js yang dibawa oleh base image.
 
 ### Ringkasan Coverage Security
 
@@ -180,7 +180,7 @@ Memindai Docker image untuk vulnerability di OS package level maupun language-le
 
 Selama implementasi pipeline, ditemukan beberapa security issue yang berhasil diidentifikasi oleh tooling dan kemudian di-remediate.
 
-### CodeQL — Missing Rate Limiting (High, 10 temuan)
+### CodeQL - Missing Rate Limiting (High, 10 temuan)
 
 CodeQL mendeteksi bahwa endpoint auth dan vault tidak memiliki rate limiting, sehingga rentan terhadap brute force attack. Untuk password manager, serangan brute force pada endpoint login dapat memungkinkan attacker mencoba ribuan kombinasi password secara otomatis.
 
@@ -194,17 +194,17 @@ const authLimiter = rateLimit({
 });
 ```
 
-### CodeQL — Missing CSRF Middleware (High, 1 temuan)
+### CodeQL - Missing CSRF Middleware (High, 1 temuan)
 
 CodeQL mendeteksi bahwa form-based endpoint tidak memiliki proteksi CSRF (Cross-Site Request Forgery), sehingga attacker dapat membuat halaman web berbahaya yang diam-diam mengirim request ke PassVault atas nama user yang sedang login.
 
 Remediasi: ditambahkan library `csrf-csrf` dengan implementasi Double Submit Cookie pattern. Setiap form menyertakan hidden input berisi token CSRF yang diverifikasi server sebelum memproses request.
 
-### CodeQL — Missing CSRF (Test Environment, Dismissed)
+### CodeQL - Missing CSRF (Test Environment, Dismissed)
 
-CodeQL juga mendeteksi bahwa CSRF middleware di-bypass saat `NODE_ENV=test`. Ini merupakan false positive karena bypass dilakukan secara eksplisit untuk keperluan automated testing — bukan karena kelalaian implementasi. Alert di-dismiss dengan keterangan "used in tests".
+CodeQL juga mendeteksi bahwa CSRF middleware di-bypass saat `NODE_ENV=test`. Ini merupakan false positive karena bypass dilakukan secara eksplisit untuk keperluan automated testing, bukan karena kelalaian implementasi. Alert di-dismiss dengan keterangan "used in tests".
 
-### Trivy — False Positive CVE dari DevDependencies (3 CVE)
+### Trivy - False Positive CVE dari DevDependencies (3 CVE)
 
 Trivy mendeteksi tiga CVE pada package `cross-spawn`, `glob`, dan `minimatch`. Setelah investigasi, ketiganya merupakan false positive karena:
 
