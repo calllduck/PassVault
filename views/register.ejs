@@ -18,6 +18,7 @@
     <% } %>
 
     <form action="/auth/register" method="POST">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
         <input 

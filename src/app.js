@@ -27,15 +27,18 @@ app.use(cookieParser());
 app.use(limiter);
 
 // CSRF protection
-if (process.env.NODE_ENV !== 'test') {
-  const { doubleCsrf } = require('csrf-csrf');
-  const { doubleCsrfProtection } = doubleCsrf({
-    getSecret: () => process.env.JWT_SECRET,
-    cookieName: 'csrf-token',
-    cookieOptions: { sameSite: 'strict', secure: false }
-  });
-  app.use(doubleCsrfProtection);
-}
+const { doubleCsrf } = require('csrf-csrf');
+const { doubleCsrfProtection } = doubleCsrf({
+  getSecret: () => process.env.JWT_SECRET,
+  getSessionIdentifier: (req) => req.cookies['token'] || req.ip,
+  getCsrfTokenFromRequest: (req) => req.body?._csrf || req.headers['x-csrf-token'],
+  cookieName: 'csrf-token',
+  cookieOptions: { sameSite: 'strict', secure: false },
+  ignoredMethods: process.env.NODE_ENV === 'test' 
+    ? ['GET', 'HEAD', 'OPTIONS', 'POST', 'PUT', 'DELETE', 'PATCH'] 
+    : ['GET', 'HEAD', 'OPTIONS']
+});
+app.use(doubleCsrfProtection);
 
 // Template engine
 app.set('view engine', 'ejs');
@@ -48,7 +51,7 @@ app.use('/vault', vaultRoutes);
 
 // Route sementara untuk test
 app.get('/', (req, res) => {
-  res.send('PassVault is running!');
+  res.redirect('/auth/login');
 });
 
 const PORT = process.env.PORT || 3000;
